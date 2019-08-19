@@ -5,6 +5,7 @@ from selenium.webdriver.remote import webelement
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support import expected_conditions as EC
 import os
 import errno
 import traceback
@@ -109,7 +110,7 @@ class ActiveAlertAnalysis:
         
         """
         ## By chabging the called method you can change the web browser used on the process
-        driver = webdriver.Firefox() 
+        driver = webdriver.Chrome() 
         link = url
         driver.get(link)
         driver.minimize_window()
@@ -205,15 +206,20 @@ class ActiveAlertAnalysis:
             plantName: Plant's name that is supposed to be read
 
         """
-
+        print(plantName)
+        
         splitter = ';'
+        active_alerts_xpath = "//*[text()='Active Alerts']"
+
         time.sleep(5)
         
         if driver is None:
             return []
         
+        WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.XPATH, active_alerts_xpath)))
+
         ## 1st. find a span with text = "Active Alerts"; then, find the "H2" elements the span is whithin; then, the header and, finally, the main "div"  
-        divActiveAlerts = driver.find_element_by_xpath("//*[text()='Active Alerts']").find_element_by_xpath("..").find_element_by_xpath("..").find_element_by_xpath("..")
+        divActiveAlerts = driver.find_element_by_xpath(active_alerts_xpath).find_element_by_xpath("..").find_element_by_xpath("..").find_element_by_xpath("..")
         if divActiveAlerts is None:
             return []
 
