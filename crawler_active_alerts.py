@@ -135,12 +135,12 @@ class ActiveAlertAnalysis:
                 Object that references the open web browser
     
         """
-        
-        time.sleep(10)
 
         if driver is None:
             return []
         
+        WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.TAG_NAME, 'table')))
+
         tablePlants = driver.find_element_by_tag_name('table')
         if tablePlants is None:
             return []
